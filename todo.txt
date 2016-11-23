@@ -1,0 +1,18 @@
+Todo:
+
+Customers
+x  Customer sign-up page, stubbed teacher assignment
+x  CRUD
+  Admin can CRUD
+
+Teacher-customizable questions
+  Send email to teachers with list of upcoming questions
+  Create / use token to add a custom question
+  
+Later:
+  Batch import/update teachers
+  Batch import / update schools
+  Select kid's teacher via web
+  Create customer from school's obfuscated URL page
+  Filter teacher list by school
+  Customizable school page

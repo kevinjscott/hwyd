@@ -1,0 +1,68 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.customer._id ? 'Edit Customer' : 'New Customer'}}</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="vm.form.customerForm" class="form-horizontal" ng-submit="vm.save(vm.form.customerForm.$valid)" novalidate>
+      <fieldset>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="name">Name</label>
+          <input name="name" type="text" ng-model="vm.customer.name" id="name" class="form-control" placeholder="Name" required>
+          <div ng-messages="vm.form.customerForm.name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Customer name is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" ng-model="vm.customer.email" placeholder="Email" lowercase required>
+          <div ng-messages="vm.form.customerForm.email.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Email address is required.</p>
+            <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="time">Daily delivery time</label>
+          <input name="delivery.time" type="text" ng-model="vm.customer.delivery.time" id="time" class="form-control" placeholder="Time (h:mm)" required>
+          <div ng-messages="vm.form.customerForm.delivery.time.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Delivery time is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="method">Daily delivery method</label>
+          <input name="delivery.method" type="text" ng-model="vm.customer.delivery.method" id="method" class="form-control" placeholder="e.g. 'slack' (without quotes)" required>
+          <div ng-messages="vm.form.customerForm.delivery.method.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Delivery method is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="address">Daily delivery address</label>
+          <input name="delivery.address" type="text" ng-model="vm.customer.delivery.address" id="address" class="form-control" placeholder="e.g. '#customer1' (without quotes)" required>
+          <div ng-messages="vm.form.customerForm.delivery.address.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Delivery address is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="address">Teacher</label>
+          <select ng-model="vm.customer.teachers"></select>
+          <div ng-messages="vm.form.customerForm.teacher.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Teacher is required.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.customer._id ? 'Update' : 'Create'}}</button>
+        </div>
+
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

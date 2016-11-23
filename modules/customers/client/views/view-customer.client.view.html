@@ -1,0 +1,36 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.customer.name}}</h1>
+  </div>
+  <div class="">
+    <div ng-bind="vm.customer.email"></div>
+    <div ng-bind="vm.customer.delivery.time"></div>
+    <div>{{vm.customer.delivery.method}} at {{vm.customer.delivery.address}}</div>
+
+    <h3>Kids:</h3>
+    <ul>
+      <li ng-repeat="kid in vm.customer.kids">{{kid.name}}, teacher: {{kid.teacher.name}}, {{kid.teacher.grade}}, {{kid.teacher._id}}</li>
+    </ul>
+  </div>
+  <div class="pull-right"
+       ng-show="vm.customer.isCurrentUserOwner">
+    <a class="btn btn-primary"
+       ui-sref="customers.edit({ customerId: vm.customer._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Created on
+      <span ng-bind="vm.customer.createdAt | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.customer.user"
+            ng-bind="vm.customer.user.displayName"></span>
+      <span ng-if="!vm.customer.user">anonymous user</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.customer.content"></p>
+</section>

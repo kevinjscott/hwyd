@@ -1,0 +1,55 @@
+<section>
+  <div class="text-center">
+    <h2>Sign up for HWYD @ {{vm.school.name}}!</h2>
+  </div>
+  <div class="col-sm-4 col-sm-offset-4">
+    <form name="vm.form.customerForm" class="form-horizontal" ng-submit="vm.saveCustomer(vm.form.customerForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <label class="control-label" for="time">Send me a conversation starter at...</label>
+          </div>
+          <div class="col-xs-5 visible-xs-block">e.g. before meeting the bus, picking up, or eating dinner</div>
+          <div class="col-xs-7 col-sm-12">
+            <div timepicker ng-model="vm.customer.delivery.time" ng-change="changed()" hour-step="1" minute-step="5" show-meridian="true"></div>
+          <div class="col-sm-12 hidden-xs">e.g. before meeting the bus, picking up, or eating dinner</div>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <input type="email" id="email" name="email" class="form-control" ng-model="vm.customer.email" placeholder="my email address" lowercase required autofocus>
+          <div ng-messages="vm.form.customerForm.email.$error" role="alert">
+            <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+          </div>
+        </div>
+
+        <div ng-repeat="item in vm.customer.kids">
+          <div class="form-group" show-errors>
+            <input name="kidname{{$index}}" type="text" ng-model="vm.customer.kids[$index].name" id="kidname{{$index}}" class="form-control" placeholder="Child's first name" required>
+          </div>
+
+          <div class="form-group" show-errors>
+            <ui-select name="teacher{{$index}}" id="teacher{{$index}}" class="" ng-model="vm.customer.kids[$index].teacher" theme="bootstrap" required>
+              <ui-select-match placeholder="Select teacher...">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="item in vm.school.teachers | filter: $select.search">
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <a class="btn btn-default" href="#" ng-click="vm.addKid()" role="button">Add another child</a>
+        </div>
+
+        <div class="form-group pull-right">
+          <button type="submit" class="btn btn-primary btn-lg">{{vm.customer._id ? 'Update' : 'Submit'}}</button>
+        </div>
+
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
