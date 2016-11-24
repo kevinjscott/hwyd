@@ -1,4 +1,4 @@
-FROM node:0.12
+FROM node:6.9.1
 
 # Install gem sass for  grunt-contrib-sass
 RUN apt-get update -qq && apt-get install -y build-essential
@@ -29,6 +29,6 @@ ENV NODE_ENV development
 
 # Port 3000 for server
 # Port 35729 for livereload
-EXPOSE 3000 35729 1337 5858
+EXPOSE 3000
 #CMD ["grunt"]
 CMD ["gulp"]
