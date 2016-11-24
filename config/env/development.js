@@ -55,8 +55,8 @@ module.exports = {
     callbackURL: '/api/auth/linkedin/callback'
   },
   github: {
-    clientID: process.env.GITHUB_ID || '2b6fe0080bcffb445f79',
-    clientSecret: process.env.GITHUB_SECRET || 'fa1be1c3bec77b59d724571d1bd6c5b2678a7e9e',
+    clientID: process.env.GITHUB_ID || 'GITHUB_ID',
+    clientSecret: process.env.GITHUB_SECRET || 'GITHUB_SECRET',
     callbackURL: '/api/auth/github/callback'
   },
   paypal: {

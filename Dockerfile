@@ -10,6 +10,7 @@ WORKDIR /home/mean
 # Install Mean.JS Prerequisites
 RUN npm install -g grunt-cli
 RUN npm install -g bower
+RUN npm install -g gulp
 
 # Install Mean.JS packages
 ADD package.json /home/mean/package.json
@@ -28,5 +29,6 @@ ENV NODE_ENV development
 
 # Port 3000 for server
 # Port 35729 for livereload
-EXPOSE 3000 35729
-CMD ["grunt"]
+EXPOSE 3000 35729 1337 5858
+#CMD ["grunt"]
+CMD ["gulp"]
