@@ -10,4 +10,4 @@ module.exports = {
     'Daily Question 6',
     'Daily Question 7'
   ]
-}
+};

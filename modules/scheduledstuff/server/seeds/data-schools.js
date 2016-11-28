@@ -25,4 +25,4 @@ module.exports = [
       logourl: 'http://youradminpartners.com/bcompliant/css/img/generic_client_logo.png'
     }
   }
-]
+];

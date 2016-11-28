@@ -1,6 +1,8 @@
+'use strict';
+
 var _ = require('lodash');
 var moment = require('moment-timezone');
-var Promise = require('bluebird');
+// var Promise = require('bluebird');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
@@ -31,43 +33,44 @@ exports.init = function(callback){
   .catch(function(err){
     console.log('error:', err);
   });
-}
+};
 
 exports.refreshFromDB = function () {
   Teacher.find()
   .then(function(docs) {
     teachers = _.cloneDeep(docs);
-  })
+  });
 
   StockQuestion.find()
   .then(function (docs) {
     stockquestions = docs[0];
-  })
-}
+  });
+};
 
 exports.advanceToday = function(n) {
   today.add(n, 'days');
-}
+};
 
 exports.toCalendarDays = function() {
   var questions = _.cloneDeep(stockquestions.questions);
   var index = stockquestions.currentIndex;
 
-  t = moment(today).add(-0, 'days');    // for testing
+  var t = moment(today).add(-0, 'days');    // for testing
   var thedate = t;
+  var startPad = 0;
+  var d, i;
 
   // console.log((today).format('LLLL'));
-  daysPastMonday = ((_.toInteger((today).format('d')) + 1 ) % 7) - 2;
+  var daysPastMonday = ((_.toInteger((today).format('d')) + 1) % 7) - 2;
   var offset = (index) % questions.length;
 
   questions = _.concat(questions.splice(offset), questions);
-  startPad = 0;
 
-  for (var i = 0; i < questions.length; i++) {
+  for (i = 0; i < questions.length; i++) {
     thedate = moment(today).add(i, 'days');
     d = _.toInteger(thedate.format('d'));
 
-    if (d == 6 || d == 0) {
+    if (d === 6 || d === 0) {
       questions.splice(i, 0, '');
     }
   }
@@ -77,16 +80,16 @@ exports.toCalendarDays = function() {
     return {
       message: question,
       date: thedatestr
-    }
-  })
+    };
+  });
   return questions;
-}
+};
 
 exports.getCustomQuestions = function(kidOrTeacher, count) {
   count = count || 1;
   var result = [];
   var customitem = {};
-  var teacher, kid;
+  var teacher, kid, j, checkDate;
   var temp = kidOrTeacher._doc; // todo: why do I need ._doc here?
 
   if (temp.customitems) {
@@ -96,7 +99,7 @@ exports.getCustomQuestions = function(kidOrTeacher, count) {
   } else {
     // it's a kid
     kid = temp;
-    teacher = kid.teacher._doc;
+    teacher = kid.teacher ? kid.teacher._doc : null;
   }
   for (j = 0; j < count; j++) {
     checkDate = moment(today).tz('America/New_York').add(j, 'days').format('l');
@@ -111,7 +114,7 @@ exports.getCustomQuestions = function(kidOrTeacher, count) {
   }
 
   return result;
-}
+};
 
 exports.getStockQuestions = function(count) {
   count = count || 1;
@@ -124,33 +127,34 @@ exports.getStockQuestions = function(count) {
   }
 
   return result;
-}
+};
 
 exports.getQuestions = function(kidsOrTeacher, numDays) {
   var count = numDays || 1;
   var result = [];
   var stock = this.getStockQuestions(count);
-  var custom = this.getCustomQuestions(kidsOrTeacher, count);
+  // var custom = this.getCustomQuestions(kidsOrTeacher, count);
   var customarr = [];
+  var i, j;
   var kidArrLength = _.isArray(kidsOrTeacher) ? kidsOrTeacher.length : 1;
 
   if (_.isArray(kidsOrTeacher)) {
-    for (var i = 0; i < kidArrLength; i++) {
+    for (i = 0; i < kidArrLength; i++) {
       customarr.push(
         this.getCustomQuestions(kidsOrTeacher[i], count)
-      )
+      );
     }
   } else {
     customarr.push(
       this.getCustomQuestions(kidsOrTeacher, count)
-    )
+    );
   }
 
-  for (var i = 0; i < count; i++) {
+  for (i = 0; i < count; i++) {
     var s = stock[i];
     var custommessages = [];
 
-    for (var j = 0; j < kidArrLength; j++) {
+    for (j = 0; j < kidArrLength; j++) {
       // console.log(customarr[j][i]);
       custommessages.push(
         {
@@ -166,11 +170,11 @@ exports.getQuestions = function(kidsOrTeacher, numDays) {
         stockmessage: s.message,
         custommessages: custommessages,
       }
-    )
+    );
   }
 
   return result;
-}
+};
 
 exports.format = function(o) {
   var result = '';
@@ -186,16 +190,16 @@ exports.format = function(o) {
   }
 
   return result;
-}
+};
 
 exports.advanceToNextDailyQuestion = function() {
   stockquestions.currentIndex++;
   stockquestions.currentIndex = stockquestions.currentIndex % stockquestions.questions.length;
 
-  StockQuestion.update( {  }, { $set: { currentIndex: stockquestions.currentIndex }}, function() {
+  StockQuestion.update({}, { $set: { currentIndex: stockquestions.currentIndex } }, function() {
     console.log('updated currentIndex in DB');
   });
 
-}
+};
 
 

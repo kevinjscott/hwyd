@@ -1,3 +1,5 @@
+'use strict';
+
 var send = require('./send');
 
 var seedTeacherData = require('./seeds/data-teachers');
@@ -11,13 +13,13 @@ var School = require('./models/schools').School;
 
 var messages = require('./messages');
 
-var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require("mongoose"));
+var promise = require('bluebird');
+var mongoose = promise.promisifyAll(require('mongoose'));
 // var db = mongoose.connection;
 var _ = require('lodash');
 
 exports.init = function(callback){
-  Promise.promisifyAll(require('./messages')).initAsync()
+  promise.promisifyAll(require('./messages')).initAsync()
   // .then(seedSchools(true))
   // .then(seedCustomers(true))
   // .then(seedTeachers(true))  // todo: enable/disable these
@@ -25,7 +27,7 @@ exports.init = function(callback){
     messages.refreshFromDB();
     if (callback) callback(null);
   });
-}
+};
 
 var seedSchools = function(drop) {
   // _id: '20000000000000000000000'
@@ -50,8 +52,8 @@ var seedSchools = function(drop) {
       }
     );
     item.save();
-  })
-}
+  });
+};
 
 var seedCustomers = function(drop) {
   if (drop) {
@@ -73,8 +75,8 @@ var seedCustomers = function(drop) {
       }
     );
     item.save();
-  })
-}
+  });
+};
 
 var seedTeachers = function(drop) {
   // _id: '10000000000000000000000'
@@ -96,6 +98,6 @@ var seedTeachers = function(drop) {
       }
     );
     item.save();
-  })
-}
+  });
+};
 

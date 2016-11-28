@@ -1,3 +1,5 @@
+'use strict';
+
 var schedule = require('node-schedule');
 var scheduledevents = require('./scheduledevents');
 
@@ -13,6 +15,6 @@ var init = function() {
 
   // console.log('Schedule inactive. Executing scheduledevents once...')
   scheduledevents.sendMessagesForThisMinute();   // todo: uncomment above and remove this line
-}
+};
 
 module.exports.init = init;
