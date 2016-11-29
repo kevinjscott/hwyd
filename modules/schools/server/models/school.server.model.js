@@ -18,9 +18,28 @@ var SchoolSchema = new Schema({
     required: 'Please fill School name',
     trim: true
   },
-  created: {
-    type: Date,
-    default: Date.now
+  poc: {
+    email: {
+      type: String,
+      default: '',
+      required: 'Please fill in email',
+      trim: true
+    },
+    name: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    slack: {
+      type: String,
+      default: '',
+      trim: true
+    }
+  },
+  branding_logo_url: {
+    type: String,
+    default: '',
+    trim: true
   },
   user: {
     type: Schema.ObjectId,

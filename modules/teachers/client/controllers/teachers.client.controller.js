@@ -32,7 +32,6 @@
         return false;
       }
 
-      // TODO: move create/update logic to service
       if (vm.teacher._id) {
         vm.teacher.$update(successCallback, errorCallback);
       } else {

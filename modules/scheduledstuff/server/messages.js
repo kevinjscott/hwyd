@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var moment = require('moment-timezone');
-// var Promise = require('bluebird');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 

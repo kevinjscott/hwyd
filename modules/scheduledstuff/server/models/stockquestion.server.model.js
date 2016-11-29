@@ -8,8 +8,4 @@ var StockQuestionSchema = new mongoose.Schema({
 
 StockQuestionSchema.plugin(timestamps);
 
-// var StockQuestion = mongoose.model('StockQuestion', StockQuestionSchema);
-// module.exports.StockQuestion = StockQuestion;
-
 mongoose.model('StockQuestion', StockQuestionSchema);
-// module.exports = mongoose.model('StockQuestion', StockQuestionSchema);

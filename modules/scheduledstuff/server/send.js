@@ -3,8 +3,6 @@
 var Slack = require('slack-node');
 
 function slack(text, channel) {
-// console.log('attempting to slack: ' + text);
-// console.trace();
   channel = channel || '#hwyd-test';
   var slacko = new Slack();
   slacko.setWebhook('https://hooks.slack.com/services/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'); 

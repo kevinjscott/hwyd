@@ -59,7 +59,6 @@
         return false;
       }
 
-      // TODO: move create/update logic to service
       if (vm.customer._id) {
         vm.customer.$update(successCallback, errorCallback);
       } else {

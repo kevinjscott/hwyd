@@ -1,21 +1,23 @@
 'use strict';
+var promise = require('bluebird');
+var mongoose = promise.promisifyAll(require('mongoose'));
 
 var send = require('./send');
 
 var seedTeacherData = require('./seeds/data-teachers');
-var Teacher = require('./models/teachers').Teacher;
+var Teacher = mongoose.model('Teacher');
+// var Teacher = require('./models/teachers').Teacher;
 
 var seedCustomerData = require('./seeds/data-customers');
-var Customer = require('./models/customers').Customer;
+var Customer = mongoose.model('Customer');
+// var Customer = require('./models/customers').Customer;
 
 var seedSchoolData = require('./seeds/data-schools');
-var School = require('./models/schools').School;
+var School = mongoose.model('School');
+// var School = require('./models/schools').School;
 
 var messages = require('./messages');
 
-var promise = require('bluebird');
-var mongoose = promise.promisifyAll(require('mongoose'));
-// var db = mongoose.connection;
 var _ = require('lodash');
 
 exports.init = function(callback){

@@ -5,7 +5,6 @@ var moment = require('moment-timezone');
 var _ = require('lodash');
 var Customer = mongoose.model('Customer');
 var send = require('./send');
-// var messages = require('./messages');
 var promise = require('bluebird');
 var messages = promise.promisifyAll(require('./messages'));
 
