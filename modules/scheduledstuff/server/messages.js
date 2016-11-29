@@ -8,10 +8,15 @@ mongoose.Promise = require('bluebird');
 
 var teachers = require('./seeds/data-teachers');
 var stockquestions;
-var today = moment().tz('America/New_York');
 
 var StockQuestion = mongoose.model('StockQuestion');
 var Teacher = mongoose.model('Teacher');
+
+var today = function(addDays) {
+  addDays = _.isInteger(addDays) ? addDays : 0;
+  // addDays = -1; // uncomment for testing
+  return moment().tz('America/New_York').add(addDays, 'days');
+};
 
 exports.init = function(callback){
   StockQuestion.find()
@@ -47,27 +52,21 @@ exports.refreshFromDB = function () {
   });
 };
 
-exports.advanceToday = function(n) {
-  today.add(n, 'days');
-};
-
 exports.toCalendarDays = function() {
   var questions = _.cloneDeep(stockquestions.questions);
   var index = stockquestions.currentIndex;
 
-  var t = moment(today).add(-0, 'days');    // for testing
-  var thedate = t;
+  var thedate;
   var startPad = 0;
   var d, i;
 
-  // console.log((today).format('LLLL'));
-  var daysPastMonday = ((_.toInteger((today).format('d')) + 1) % 7) - 2;
+  var daysPastMonday = ((_.toInteger((today()).format('d')) + 1) % 7) - 2;
   var offset = (index) % questions.length;
 
   questions = _.concat(questions.splice(offset), questions);
 
   for (i = 0; i < questions.length; i++) {
-    thedate = moment(today).add(i, 'days');
+    thedate = moment(today()).add(i, 'days');
     d = _.toInteger(thedate.format('d'));
 
     if (d === 6 || d === 0) {
@@ -76,7 +75,7 @@ exports.toCalendarDays = function() {
   }
 
   questions = _.map(questions, function(question, i) {
-    var thedatestr = moment(today).add(i, 'days').format('l');
+    var thedatestr = moment(today()).add(i, 'days').format('l');
     return {
       message: question,
       date: thedatestr
@@ -102,7 +101,7 @@ exports.getCustomQuestions = function(kidOrTeacher, count) {
     teacher = kid.teacher ? kid.teacher._doc : null;
   }
   for (j = 0; j < count; j++) {
-    checkDate = moment(today).tz('America/New_York').add(j, 'days').format('l');
+    checkDate = moment(today()).tz('America/New_York').add(j, 'days').format('l');
     customitem = {};
     if (teacher) {
       customitem = _.find(teacher.customitems, ['date', checkDate]) || {};

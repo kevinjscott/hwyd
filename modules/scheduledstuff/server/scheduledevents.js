@@ -11,8 +11,7 @@ var messages = promise.promisifyAll(require('./messages'));
 
 exports.sendMessagesForThisMinute = function() {
   var t = moment().tz('America/New_York').format('H:mm');
-  // var t = moment.tz('2014-06-01T19:00:40Z', 'America/New_York').format('H:mm'); // 16:33
-
+  // var t = moment.tz('2016-06-01T19:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
   Customer.find({ 'delivery.time': t })
   .populate('kids.teacher')
   .then(function (matchingcustomers) {
