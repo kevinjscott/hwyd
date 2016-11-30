@@ -199,5 +199,3 @@ exports.advanceToNextDailyQuestion = function() {
   });
 
 };
-
-

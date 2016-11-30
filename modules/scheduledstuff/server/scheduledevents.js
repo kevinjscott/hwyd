@@ -7,14 +7,19 @@ var Customer = mongoose.model('Customer');
 var send = require('./send');
 var promise = require('bluebird');
 var messages = promise.promisifyAll(require('./messages'));
+var s = require('underscore.string');
 
 exports.sendMessagesForThisMinute = function() {
   var t = moment().tz('America/New_York').format('H:mm');
   // var t = moment.tz('2016-06-01T19:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
+
+  var k = {};
+  var subj = '';
+
   Customer.find({ 'delivery.time': t })
   .populate('kids.teacher')
   .then(function (matchingcustomers) {
-    console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
+    // console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
     if (matchingcustomers.length) {
       _.forEach(matchingcustomers, function(customer) {
         var questionarr = messages.getQuestions(customer.kids);
@@ -24,6 +29,14 @@ exports.sendMessagesForThisMinute = function() {
           switch(customer.delivery.method) {
             case 'slack':
               send.slack(msg, customer.delivery.address);
+              break;
+            case 'email':
+              k = customer.kids;
+              k = _.map(k, 'name');
+              k = _.uniq(k);
+              k = _.sortBy(k);
+              subj = 'A great question for ' + s.toSentenceSerial(k, ', ', ' and ');
+              send.dailyCustomerEmail(subj, msg, customer.delivery.address);
               break;
             default:
               console.log('delivery method not found for user ' + JSON.stringify(customer));
