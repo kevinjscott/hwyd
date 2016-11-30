@@ -9,7 +9,6 @@ var server = app.start(function() {
     var scheduler = require('./modules/scheduledstuff/server/scheduler');
     scheduler.init();
 
-    // require('./app/doit');
     require('./modules/scheduledstuff/server/doit');
   });
 
