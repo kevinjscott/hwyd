@@ -49,6 +49,20 @@
           pageTitle: 'Edit Teacher {{ teacherResolve.name }}'
         }
       })
+      .state('teachers.editquestion', {
+        url: '/:teacherId/editquestion/:encryptedDate',
+        templateUrl: 'modules/teachers/client/views/form-question.client.view.html',
+        controller: 'TeachersController',
+        controllerAs: 'vm',
+        resolve: {
+          teacherResolve: getTeacher,
+          stateParamsResolve: getStateParams
+        },
+        data: {
+          // roles: ['user', 'admin'],
+          pageTitle: 'Add a custom question - {{ teacherResolve.name }}'
+        }
+      })
       .state('teachers.view', {
         url: '/:teacherId',
         templateUrl: 'modules/teachers/client/views/view-teacher.client.view.html',
@@ -69,6 +83,12 @@
     return TeachersService.get({
       teacherId: $stateParams.teacherId
     }).$promise;
+  }
+
+  getStateParams.$inject = ['$stateParams'];
+
+  function getStateParams($stateParams) {
+    return $stateParams;
   }
 
   newTeacher.$inject = ['TeachersService'];

@@ -35,7 +35,7 @@ exports.slack = function slack(text, channel) {
 exports.sendTestEmail = function (msg, to) {
   var message = null;
 
-  var app = express();
+  var app = express();  // todo: move these to global?
   app.engine('server.view.html', consolidate[config.templateEngine]);
   app.set('view engine', 'server.view.html');
   app.set('views', './');

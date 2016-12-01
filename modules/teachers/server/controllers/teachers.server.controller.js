@@ -123,7 +123,6 @@ exports.teacherByID = function(req, res, next, id) {
 
 
 exports.sendHeadsUpEmail = function (req, res, next) {
-  // Init Variables
   var message = null;
 
   async.waterfall([
@@ -136,7 +135,6 @@ exports.sendHeadsUpEmail = function (req, res, next) {
         done(err, emailHTML);
       });
     },
-    // If valid email, send reset email using service
     function (emailHTML, done) {
       var mailOptions = {
         to: 'kevinjscott@gmail.com',
@@ -156,3 +154,8 @@ exports.sendHeadsUpEmail = function (req, res, next) {
     }
   });
 };
+// 
+// 5 links to edit a question
+// email template
+// generate the links - start with just the id
+// create an edit question view and route.
