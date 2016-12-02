@@ -1,21 +1,17 @@
 <section>
   <div class="page-header">
-    <h1>Edit question - {{vm.teacher._id ? 'Edit Teacher' : 'New Teacher'}}</h1>
-    <h2>{{vm.date()}}</h2>
-
+    <h1>{{vm.customQuestion() ? 'Change your question for ' : 'Add a new question for '}}{{vm.date('dddd')}}</h1>
   </div>
   <div class="col-md-12">
-    <form name="vm.form.teacherForm" class="form-horizontal" ng-submit="vm.saveQuestion(vm.form.teacherForm.$valid)" novalidate>
+    <form name="vm.form.questionForm" class="form-horizontal" ng-submit="vm.saveQuestion(vm.form.questionForm.$valid)" novalidate>
       <fieldset>
-        <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.teacher.name" id="name" class="form-control" placeholder="Name" required>
-          <div ng-messages="vm.form.teacherForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Teacher name is required.</p>
-          </div>
+        <div class="form-group">
+          <label class="control-label" for="question">{{vm.date('dddd, MMMM Do YYYY')}}</label>
+          <input name="question" type="text" ng-model="vm.customQuestion()" id="question" class="form-control"
+          placeholder="What would you like your students to ask their parents?" required>
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-default">{{vm.teacher._id ? 'Update' : 'Create'}}</button>
+          <button type="submit" class="btn btn-default">{{vm.customQuestion() ? 'Submit' : 'Add'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>

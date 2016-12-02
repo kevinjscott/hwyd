@@ -20,11 +20,23 @@
     vm.saveQuestion = saveQuestion;
     vm.routeParams = routeParams;
     vm.date = convertDate;
+    vm.customQuestion = customQuestion;   // todo: secure this page / API
 
-    function convertDate() {
-      var u = moment(vm.routeParams.encryptedDate, 'X');
+    function customQuestion() {
+      // var d = '11/28/2016';
+      var d = convertDate('l');
+      var result = _.find(teacher.customitems, ['date', d]);
+      if (result) {
+        return result.message;
+      } else {
+        return null;
+      }
+    }
+
+    function convertDate(token) {
+      var u = moment(vm.routeParams.encryptedDate, 'x');
       if (u.isValid()) {
-        u = u.format('l');
+        u = u.format(token);
       } else {
         u = null;
       }
