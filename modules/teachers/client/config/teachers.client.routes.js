@@ -14,6 +14,29 @@
         url: '/teachers',
         template: '<ui-view/>'
       })
+      .state('editquestion', {
+        abstract: true,
+        url: '/q',
+        template: '<ui-view/>'
+      })
+
+      // custom question routes
+      .state('editquestion.editquestion', {
+        url: '/:teacherId/:encryptedDate',
+        templateUrl: 'modules/teachers/client/views/form-question.client.view.html',
+        controller: 'TeachersController',
+        controllerAs: 'vm',
+        resolve: {
+          teacherResolve: getTeacher,
+          stateParamsResolve: getStateParams
+        },
+        data: {
+          // roles: ['user', 'admin'],
+          pageTitle: 'Add a custom question - {{ teacherResolve.name }}'
+        }
+      })
+
+      // teachers routes
       .state('teachers.list', {
         url: '',
         templateUrl: 'modules/teachers/client/views/list-teachers.client.view.html',
@@ -47,20 +70,6 @@
         data: {
           roles: ['user', 'admin'],
           pageTitle: 'Edit Teacher {{ teacherResolve.name }}'
-        }
-      })
-      .state('teachers.editquestion', {
-        url: '/:teacherId/editquestion/:encryptedDate',
-        templateUrl: 'modules/teachers/client/views/form-question.client.view.html',
-        controller: 'TeachersController',
-        controllerAs: 'vm',
-        resolve: {
-          teacherResolve: getTeacher,
-          stateParamsResolve: getStateParams
-        },
-        data: {
-          // roles: ['user', 'admin'],
-          pageTitle: 'Add a custom question - {{ teacherResolve.name }}'
         }
       })
       .state('teachers.view', {
