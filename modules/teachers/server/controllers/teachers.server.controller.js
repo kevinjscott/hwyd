@@ -86,7 +86,7 @@ exports.delete = function(req, res) {
  * List of Teachers
  */
 exports.list = function(req, res) {
-  Teacher.find().sort('-created').populate('user', 'displayName').exec(function(err, teachers) {
+  Teacher.find().sort('-createdAt').populate('user', 'displayName').exec(function(err, teachers) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -154,7 +154,7 @@ exports.sendHeadsUpEmail = function (req, res, next) {
     }
   });
 };
-// 
+//
 // 5 links to edit a question
 // email template
 // generate the links - start with just the id

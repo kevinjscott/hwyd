@@ -1,0 +1,23 @@
+<section>
+  <div class="page-header">
+    <h1>Custom questions</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="customquestion in vm.customquestions"
+       ui-sref="customquestions.view({ customquestionId: customquestion._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Created by
+        <span ng-bind="customquestion.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="customquestion.user" ng-bind="customquestion.user.displayName"></span>
+        <span ng-if="!customquestion.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="customquestion.message"></h4>
+      <p class="list-group-item-heading" ng-bind="customquestion.teacher[0].name"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.customquestions.$resolved && !vm.customquestions.length">
+    No Customquestions yet, why don't you <a ui-sref="customquestions.create">create one</a>?
+  </div>
+</section>
