@@ -8,12 +8,23 @@ var path = require('path'),
   Customquestion = mongoose.model('Customquestion'),
   Teacher = mongoose.model('Teacher'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  moment = require('moment'),
   _ = require('lodash');
 
 /**
  * Create a Customquestion
  */
 exports.create = function(req, res) {
+  console.log(JSON.stringify(req.body, null, 2));
+  var d = req.body.date;
+
+  if (_.toInteger(d) > 0) {
+    console.log('converting');
+    d = moment(d, 'x').format('l');
+  }
+
+  req.body.date = d;
+
   var customquestion = new Customquestion(req.body);
   customquestion.user = req.user;
 
@@ -23,7 +34,9 @@ exports.create = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.jsonp(customquestion);
+      customquestion.populate('teacher', function(err) {
+        res.jsonp(customquestion);
+      })
     }
   });
 };

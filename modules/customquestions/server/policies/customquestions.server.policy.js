@@ -34,7 +34,7 @@ exports.invokeRolesPolicies = function () {
     roles: ['guest'],
     allows: [{
       resources: '/api/customquestions',
-      permissions: ['get']
+      permissions: ['get', 'post']
     }, {
       resources: '/api/customquestions/:customquestionId',
       permissions: ['get']
