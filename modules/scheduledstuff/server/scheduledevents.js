@@ -8,6 +8,8 @@ var send = require('./send');
 var promise = require('bluebird');
 var messages = promise.promisifyAll(require('./messages'));
 var s = require('underscore.string');
+var path = require('path');
+var config = require(path.resolve('./config/config'));
 
 exports.sendMessagesForThisMinute = function() {
   var t = moment().tz('America/New_York').format('H:mm');
@@ -20,7 +22,7 @@ exports.sendMessagesForThisMinute = function() {
   .lean()
   .populate('kids.teacher')
   .then(function (matchingcustomers) {
-    console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
+    console.log(t + ' (v' + config.meanjs.version + ') Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
     if (matchingcustomers.length) {
       _.forEach(matchingcustomers, function(customer) {
         messages.getQuestionsForKids(customer.kids)
