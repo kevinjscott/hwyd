@@ -10,8 +10,8 @@ var messages = promise.promisifyAll(require('./messages'));
 var s = require('underscore.string');
 
 exports.sendMessagesForThisMinute = function() {
-  // var t = moment().tz('America/New_York').format('H:mm');
-  var t = moment.tz('2016-12-09T19:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
+  var t = moment().tz('America/New_York').format('H:mm');
+  // var t = moment.tz('2016-12-10T20:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
 
   var k = {};
   var subj = '';
@@ -27,7 +27,7 @@ exports.sendMessagesForThisMinute = function() {
         .then(function(questionarr) {
           var msg = messages.format(questionarr[0]);  // 0 = today
           // console.log(msg);
-          if (questionarr[0].stockmessage) {
+          if (msg) {
             switch(customer.delivery.method) {
               case 'slack':
                 send.slack(msg, customer.delivery.address);
