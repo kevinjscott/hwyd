@@ -4,12 +4,14 @@ var _ = require('lodash');
 var moment = require('moment-timezone');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+var Promise = require('bluebird');
 
 var teachers = require('./seeds/data-teachers');
 var stockquestions;
 
 var StockQuestion = mongoose.model('StockQuestion');
 var Teacher = mongoose.model('Teacher');
+var CustomQuestion = mongoose.model('Customquestion');
 
 var today = function(addDays) {
   addDays = _.isInteger(addDays) ? addDays : 0;
@@ -83,37 +85,6 @@ exports.toCalendarDays = function() {
   return questions;
 };
 
-exports.getCustomQuestions = function(kidOrTeacher, count) {
-  count = count || 1;
-  var result = [];
-  var customitem = {};
-  var teacher, kid, j, checkDate;
-  var temp = kidOrTeacher._doc; // todo: why do I need ._doc here?
-
-  if (temp.customitems) {
-    // it's a teacher
-    teacher = temp;
-    kid = {};
-  } else {
-    // it's a kid
-    kid = temp;
-    teacher = kid.teacher ? kid.teacher._doc : null;
-  }
-  for (j = 0; j < count; j++) {
-    checkDate = moment(today()).tz('America/New_York').add(j, 'days').format('l');
-    customitem = {};
-    if (teacher) {
-      customitem = _.find(teacher.customitems, ['date', checkDate]) || {};
-    }
-    customitem.kid = kid.name || '';
-    customitem.date = checkDate;
-    customitem.message = customitem.message || '';
-    result.push(customitem);
-  }
-
-  return result;
-};
-
 exports.getStockQuestions = function(count) {
   count = count || 1;
   var result = [];
@@ -127,52 +98,97 @@ exports.getStockQuestions = function(count) {
   return result;
 };
 
-exports.getQuestions = function(kidsOrTeacher, numDays) {
-  var count = numDays || 1;
-  var result = [];
-  var stock = this.getStockQuestions(count);
-  // var custom = this.getCustomQuestions(kidsOrTeacher, count);
-  var customarr = [];
-  var i, j;
-  var kidArrLength = _.isArray(kidsOrTeacher) ? kidsOrTeacher.length : 1;
+exports.getCustomQuestionsForKid = function(kid, count) {
+  var self = this;
+  return new Promise(function(resolve, reject) {
+    count = count || 1;
+    var result = [];
+    var customitem = {};
+    var teacher, j, checkDate;
 
-  if (_.isArray(kidsOrTeacher)) {
-    for (i = 0; i < kidArrLength; i++) {
-      customarr.push(
-        this.getCustomQuestions(kidsOrTeacher[i], count)
-      );
-    }
-  } else {
-    customarr.push(
-      this.getCustomQuestions(kidsOrTeacher, count)
-    );
-  }
+    teacher = kid.teacher;
 
-  for (i = 0; i < count; i++) {
-    var s = stock[i];
-    var custommessages = [];
+    CustomQuestion.find({ teacher: teacher._id })
+    .lean()
+    .exec(function (err, customquestions) {
+      if (err) return handleError(err);
 
-    for (j = 0; j < kidArrLength; j++) {
-      // console.log(customarr[j][i]);
-      custommessages.push(
-        {
-          kid: customarr[j][i].kid,
-          message: customarr[j][i].message
+      for (j = 0; j < count; j++) {
+        checkDate = moment(today()).tz('America/New_York').add(j, 'days').format('l');
+        customitem = {};
+        if (teacher) {
+          customitem = _.find(customquestions, ['date', checkDate]) || {};
         }
-      );
-    }
-
-    result.push(
-      {
-        date: s.date,
-        stockmessage: s.message,
-        custommessages: custommessages,
+        customitem.kid = kid.name || '';
+        customitem.date = checkDate;
+        customitem.message = customitem.message || '';
+        result.push(customitem);
       }
-    );
-  }
 
-  return result;
+      resolve(result);
+    });
+  })
 };
+
+exports.getQuestionsForKids = function(kids, numDays) {
+  var self = this;
+  return new Promise(function(resolve, reject) {
+    var count = numDays || 1;
+    var result = [];
+    var stock = self.getStockQuestions(count);
+    var customarr = [];
+    var i, j;
+    // todo: handle case where kids is not an array, but just a single element
+    var kidArrLength = kids.length
+
+    var questions = [
+      {
+        date: '1/1/2011',
+        stockmessage: 'This is the stock message',
+        custommessages: []
+      }
+    ];
+
+    // var itemPromises = _.map(kids, self.getCustomQuestionsForKid);
+    var itemPromises = _.map(kids, function(coll) {
+      return (self.getCustomQuestionsForKid(coll, count));
+    });
+
+    Promise.all(itemPromises)
+    .then(function(results) {
+       results.forEach(function(item) {
+         customarr.push(item);
+       });
+      //  console.log(JSON.stringify(customarr, null, 2));
+       for (i = 0; i < count; i++) {
+         var s = stock[i];
+         var custommessages = [];
+
+         for (j = 0; j < kidArrLength; j++) {
+           // console.log(customarr[j][i]);
+           custommessages.push(
+             {
+               kid: customarr[j][i].kid,
+               message: customarr[j][i].message
+             }
+           );
+         }
+
+         result.push(
+           {
+             date: s.date,
+             stockmessage: s.message,
+             custommessages: custommessages,
+           }
+         );
+       }
+       resolve(result);
+    })
+    .catch(function(err) {
+      console.log("Failed:", err);
+    });
+  })
+}
 
 exports.format = function(o) {
   var result = '';

@@ -10,16 +10,24 @@ var promise = require('bluebird');
 var messages = promise.promisifyAll(require('./messages'));
 var count = 7;
 
-// Customer.findOne({ 'delivery.address': '#customer1'})
-// .populate('kids.teacher')
-// .then(function (item) {
-//   if (item) {
-//     // console.log('found customer: ' + item);
-//     console.log(JSON.stringify(messages.getQuestions(item.kids[0], count), null, 2));
-//   } else {
-//     console.log('customer not found');
-//   }
-// })
+Customer.findOne({ 'delivery.address': '#customer1'})
+.populate('kids.teacher')
+.lean()
+.then(function (item) {
+  if (item) {
+    // console.log('found customer: ' + item);
+    // console.log(JSON.stringify(item.kids, null, 2));
+    messages.getQuestionsForKids(item.kids, count)
+    .then(function(data){
+      console.log(JSON.stringify(data, null, 2));
+    })
+    .catch(function(err){
+      console.error (err);
+    });
+  } else {
+    console.log('customer not found');
+  }
+})
 
 // Teacher.findOne({ 'slack': '#teacher1'})
 // .then(function (item) {
@@ -49,4 +57,3 @@ var count = 7;
 // console.log(JSON.stringify(messages.getCustomQuestions(customers[0].kids[0], count), null, 2));
 // messages.advanceToNextDailyQuestion();
 // console.log(JSON.stringify(messages.getQuestions(customers[0].kids), null, 2));
-

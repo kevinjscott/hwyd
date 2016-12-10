@@ -11,37 +11,44 @@ var s = require('underscore.string');
 
 exports.sendMessagesForThisMinute = function() {
   var t = moment().tz('America/New_York').format('H:mm');
-  // var t = moment.tz('2016-06-01T19:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
+  // var t = moment.tz('2016-12-09T19:01:40Z', 'America/New_York').format('H:mm'); // 15:01 - uncomment this to test with a specific date/time
 
   var k = {};
   var subj = '';
 
   Customer.find({ 'delivery.time': t })
+  .lean()
   .populate('kids.teacher')
   .then(function (matchingcustomers) {
     // console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
     if (matchingcustomers.length) {
       _.forEach(matchingcustomers, function(customer) {
-        var questionarr = messages.getQuestions(customer.kids);
-        var msg = messages.format(questionarr[0]);
-
-        if (questionarr[0].stockmessage) {
-          switch(customer.delivery.method) {
-            case 'slack':
-              send.slack(msg, customer.delivery.address);
-              break;
-            case 'email':
-              k = customer.kids;
-              k = _.map(k, 'name');
-              k = _.uniq(k);
-              k = _.sortBy(k);
-              subj = 'A great question for ' + s.toSentenceSerial(k, ', ', ' and ');
-              send.dailyCustomerEmail(subj, msg, customer.delivery.address);
-              break;
-            default:
-              console.log('delivery method not found for user ' + JSON.stringify(customer));
+        messages.getQuestionsForKids(customer.kids)
+        .then(function(questionarr) {
+          var msg = messages.format(questionarr[0]);  // 0 = today
+          // console.log(msg);
+          if (questionarr[0].stockmessage) {
+            switch(customer.delivery.method) {
+              case 'slack':
+                send.slack(msg, customer.delivery.address);
+                break;
+              case 'email':
+                k = customer.kids;
+                k = _.map(k, 'name');
+                k = _.uniq(k);
+                k = _.sortBy(k);
+                subj = 'A great question for ' + s.toSentenceSerial(k, ', ', ' and ');
+                send.dailyCustomerEmail(subj, msg, customer.delivery.address);
+                break;
+              default:
+                console.log('delivery method not found for user ' + JSON.stringify(customer));
+            }
           }
-        }
+        })
+        .catch(function(err){
+          console.error (err);
+        });
+
       });
     }
     messages.refreshFromDB();
