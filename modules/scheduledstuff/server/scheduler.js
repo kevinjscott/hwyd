@@ -14,7 +14,7 @@ var init = function() {
   });
 
   // console.log('Schedule inactive. Executing scheduledevents once...')
-  scheduledevents.sendMessagesForThisMinute();   // todo: uncomment above and remove this line
+  scheduledevents.sendMessagesForThisMinute();
 };
 
 module.exports.init = init;

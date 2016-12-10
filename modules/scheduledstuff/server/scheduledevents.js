@@ -20,7 +20,7 @@ exports.sendMessagesForThisMinute = function() {
   .lean()
   .populate('kids.teacher')
   .then(function (matchingcustomers) {
-    // console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
+    console.log(t + ' Customers found: ' + JSON.stringify(matchingcustomers, null, 2));
     if (matchingcustomers.length) {
       _.forEach(matchingcustomers, function(customer) {
         messages.getQuestionsForKids(customer.kids)
