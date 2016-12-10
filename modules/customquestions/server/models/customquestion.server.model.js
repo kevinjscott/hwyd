@@ -3,9 +3,9 @@
 /**
  * Module dependencies.
  */
- var mongoose = require('mongoose'),
-   Schema = mongoose.Schema,
-   timestamps = require('mongoose-timestamp');
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  timestamps = require('mongoose-timestamp');
 
 /**
  * Customquestion Schema

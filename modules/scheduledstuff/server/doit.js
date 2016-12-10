@@ -10,7 +10,7 @@ var promise = require('bluebird');
 var messages = promise.promisifyAll(require('./messages'));
 var count = 7;
 
-Customer.findOne({ 'delivery.address': '#customer1'})
+Customer.findOne({ 'delivery.address': '#customer1' })
 .populate('kids.teacher')
 .lean()
 .then(function (item) {
@@ -27,7 +27,7 @@ Customer.findOne({ 'delivery.address': '#customer1'})
   } else {
     console.log('customer not found');
   }
-})
+});
 
 // Teacher.findOne({ 'slack': '#teacher1'})
 // .then(function (item) {

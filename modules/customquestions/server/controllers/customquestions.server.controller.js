@@ -36,7 +36,7 @@ exports.create = function(req, res) {
     } else {
       customquestion.populate('teacher', function(err) {
         res.jsonp(customquestion);
-      })
+      });
     }
   });
 };

@@ -32,7 +32,7 @@
     function customQuestion() {
       // var d = '11/28/2016';
       var d = convertDate('l');
-      var result = _.find(teacher.customitems, ['date', d]);
+      var result = _.find(vm.customquestion.teacher.customitems, ['date', d]);
       if (result) {
         return result.message;
       } else {
