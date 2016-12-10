@@ -81,11 +81,13 @@ exports.dailyCustomerEmail = function (subj, msg, to) {
         html: msg
       };
       smtpTransport.sendMail(mailOptions, function (err) {
+        console.log(err);
         done(err, 'done');
       });
     }
   ], function (err) {
     if (err) {
+      console.log(err);
       // return next(err);
     }
   });
