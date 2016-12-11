@@ -192,6 +192,7 @@ gulp.task('mocha', function (done) {
         timeout: 10000
       }))
       .on('error', function (err) {
+        console.log(err);
         // If an error occurs, save it
         error = err;
       })
