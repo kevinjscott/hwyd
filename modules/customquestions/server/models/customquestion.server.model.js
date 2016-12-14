@@ -23,7 +23,7 @@ var CustomquestionSchema = new Schema({
     required: 'Please fill in the date (as a string d/m/yyyy)',
     trim: true
   },
-  teacher: [{ type: Schema.ObjectId, ref: 'Teacher' }],
+  teacher: { type: Schema.ObjectId, ref: 'Teacher' },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

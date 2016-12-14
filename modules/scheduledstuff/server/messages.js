@@ -109,7 +109,7 @@ exports.getCustomQuestionsForKid = function (kid, count) {
 
     CustomQuestion.find({ teacher: teacher._id })
       .lean()
-      .exec(function (err, customquestions) {
+      .exec(function (err, customquestions) { // todo: expand beyond one custom question per day per teacher
         if (err) reject(err);
 
         for (j = 0; j < count; j++) {
