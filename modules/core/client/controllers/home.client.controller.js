@@ -1,11 +1,13 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'moment',
-  function ($scope, Authentication, moment) {
+angular.module('core').controller('HomeController', ['$scope', 'Authentication', 'moment', 'TeachersService',
+  function ($scope, Authentication, moment, TeachersService) {
     var i, o;
 
     // This provides Authentication context.
     $scope.authentication = Authentication;
+
+    $scope.teachers = TeachersService.query();
 
     $scope.dates = [];
     for (i = 0; i < 7; i++) {
