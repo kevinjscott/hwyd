@@ -59,7 +59,7 @@ exports.sendMessagesForThisMinute = function() {
 
 exports.advanceToNextDailyQuestion = function () {
   messages.advanceToNextDailyQuestion();
-  send.slack('messages.advanceToNextDailyQuestion()', '#hwyd-test');
+  // send.slack('messages.advanceToNextDailyQuestion()', '#hwyd-test');
 };
 
 exports.pingSlack = function (msg) {
