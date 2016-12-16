@@ -17,7 +17,7 @@
   "scripts": {
     "start": "gulp",
     "test": "grunt test",
-    "postinstall": "node_modules/bower/bin/bower install --config.interactive=false"
+    "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
     "acl": "~0.4.4",
