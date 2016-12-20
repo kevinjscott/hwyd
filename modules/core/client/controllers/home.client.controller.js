@@ -17,6 +17,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
       o = {};
       o.pretty = temp.format('ddd, MMM D');
       o.ms = temp.format('x');
+      o.ignoreme = moment(o.pretty, 'ddd, MMM D').format('x');
       $scope.dates.push(o);
     }
   }
