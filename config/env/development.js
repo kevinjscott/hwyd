@@ -23,7 +23,7 @@ module.exports = {
       //  directoryPath: process.cwd(),
       //  fileName: 'access.log',
       //  rotatingLogs: { // for more info on rotating logs - https://github.com/holidayextras/file-stream-rotator#usage
-      //    active: false, // activate to use rotating logs 
+      //    active: false, // activate to use rotating logs
       //    fileName: 'access-%DATE%.log', // if rotating logs are active, this fileName setting will be used
       //    frequency: 'daily',
       //    verbose: false
@@ -74,6 +74,11 @@ module.exports = {
         pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
       }
     }
+  },
+  twilio: {
+    from: process.env.TWILIO_FROM || 'TWILIO_FROM',
+    sid: process.env.TWILIO_SID || 'TWILIO_SID',
+    token: process.env.TWILIO_TOKEN || 'TWILIO_TOKEN'
   },
   livereload: true,
   seedDB: {

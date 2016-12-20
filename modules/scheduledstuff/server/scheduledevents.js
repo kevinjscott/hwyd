@@ -34,6 +34,9 @@ exports.sendMessagesForThisMinute = function() {
               case 'slack':
                 send.slack(msg, customer.delivery.address);
                 break;
+              case 'text':
+                send.twilioText(msg, customer.delivery.address);
+                break;
               case 'email':
                 k = customer.kids;
                 k = _.map(k, 'name');
