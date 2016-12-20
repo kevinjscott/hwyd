@@ -9,6 +9,8 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 
     $scope.teachers = TeachersService.query();
 
+    $scope.version = version;
+
     $scope.dates = [];
     for (i = 0; i < 7; i++) {
       o = {};
