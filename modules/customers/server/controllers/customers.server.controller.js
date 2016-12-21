@@ -8,6 +8,7 @@ var path = require('path'),
   Customer = mongoose.model('Customer'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   send = require(path.resolve('./modules/scheduledstuff/server/send')),
+  s = require("underscore.string"),
   _ = require('lodash');
 
 /**
@@ -15,6 +16,7 @@ var path = require('path'),
  */
 exports.create = function(req, res) {
   var customer = new Customer(req.body);
+  var k, subj, msg;
   customer.user = req.user;
 
   customer.save(function(err) {
@@ -23,7 +25,14 @@ exports.create = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      var msg = 'You\'re in!';
+      k = customer.kids;
+      // console.log(req.body.kids);
+      k = _.map(k, 'name');
+      k = _.uniq(k);
+      k = _.sortBy(k);
+
+      msg = 'Every weekday, you\'ll receive great questions to ask ' + s.toSentenceSerial(k, ', ', ' and ') + '.\n\n';
+      msg += 'If ' + teachersNames(req.body.kids, ' or ') + ' submits a specific question for students, you\'ll see that, too. Have fun!';
       switch(customer.delivery.method) {
         case 'slack':
           send.slack(msg, customer.delivery.address);
@@ -32,11 +41,7 @@ exports.create = function(req, res) {
           send.twilioText(msg, customer.delivery.address);
           break;
         case 'email':
-          k = customer.kids;
-          k = _.map(k, 'name');
-          k = _.uniq(k);
-          k = _.sortBy(k);
-          subj = 'A great question for ' + s.toSentenceSerial(k, ', ', ' and ');
+          subj = 'Welcome!';
           send.dailyCustomerEmail(subj, msg, customer.delivery.address);
           break;
         default:
@@ -135,4 +140,13 @@ exports.customerByID = function(req, res, next, id) {
     req.customer = customer;
     next();
   });
+};
+
+var teachersNames = function(kidsObj, separator) {
+  var k = kidsObj;
+  k = _.map(k, 'teacher.name');
+  k = _.uniq(k);
+  k = _.sortBy(k);
+  var result = s.toSentenceSerial(k, ', ', separator);
+  return result;
 };
