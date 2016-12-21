@@ -32,7 +32,7 @@ exports.slack = function slack(text, channel) {
   });
 };
 
-exports.twilioText = function twiliaText(text, recipient) {
+exports.twilioText = function twilioText(text, recipient) {
   var client = require('twilio')(config.twilio.sid, config.twilio.token);
 
   client.sendMessage({
@@ -41,9 +41,9 @@ exports.twilioText = function twiliaText(text, recipient) {
       body: text // body of the SMS message
 
   }, function(err, responseData) { //this function is executed when a response is received from Twilio
-
-      if (!err) { // "err" is an error received during the request, if any
-
+      if (err) {
+        console.log('Not sent to Twilio');
+      } else {
           // "responseData" is a JavaScript object containing data received from Twilio.
           // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
           // http://www.twilio.com/docs/api/rest/sending-sms#example-1

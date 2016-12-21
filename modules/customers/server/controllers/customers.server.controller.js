@@ -7,6 +7,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   Customer = mongoose.model('Customer'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  send = require(path.resolve('./modules/scheduledstuff/server/send')),
   _ = require('lodash');
 
 /**
@@ -22,6 +23,26 @@ exports.create = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      var msg = 'You\'re in!';
+      switch(customer.delivery.method) {
+        case 'slack':
+          send.slack(msg, customer.delivery.address);
+          break;
+        case 'text':
+          send.twilioText(msg, customer.delivery.address);
+          break;
+        case 'email':
+          k = customer.kids;
+          k = _.map(k, 'name');
+          k = _.uniq(k);
+          k = _.sortBy(k);
+          subj = 'A great question for ' + s.toSentenceSerial(k, ', ', ' and ');
+          send.dailyCustomerEmail(subj, msg, customer.delivery.address);
+          break;
+        default:
+          console.log('delivery method not found for user ' + JSON.stringify(customer));
+      }
+
       res.jsonp(customer);
     }
   });
