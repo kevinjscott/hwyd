@@ -8,7 +8,7 @@
 
   SchoolsController.$inject = ['$scope', '$state', '$timeout', '$window', 'Authentication', 'schoolResolve', 'customerResolve', 'moment'];
 
-  function SchoolsController ($scope, $state, $timeout, $window, Authentication, school, customer, moment) {
+  function SchoolsController($scope, $state, $timeout, $window, Authentication, school, customer, moment) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -22,12 +22,24 @@
     vm.addKid = addKid;
 
     vm.deliverymethod = {
-        availableOptions: [
-          {id: 'email', name: 'Email', placeholder: 'Email address'},
-          {id: 'text', name: 'Text / SMS', placeholder: 'Phone number'},
-          {id: 'slack', name: 'Slack', placeholder: 'Slack channel'}
-        ]
-      };
+      availableOptions: [
+        {
+          id: 'email',
+          name: 'Email',
+          placeholder: 'Email address'
+        },
+        {
+          id: 'text',
+          name: 'Text / SMS',
+          placeholder: 'Phone number'
+        },
+        {
+          id: 'slack',
+          name: 'Slack',
+          placeholder: 'Slack channel'
+        }
+      ]
+    };
 
     // Remove existing School
     function remove() {
@@ -92,11 +104,15 @@
 
     vm.customer.kids = [{}];
     vm.customer.delivery = {
-      method: {id: 'text', name: 'Text / SMS', placeholder: 'Phone number'}, //This sets the default value of the select in the ui
+      method: {
+        id: 'text',
+        name: 'Text / SMS',
+        placeholder: 'Phone number'
+      }, //This sets the default value of the select in the ui
       time: 'Tue Nov 22 2016 15:00:00 GMT-0500 (EST)'
     };
 
-    function addKid(){
+    function addKid() {
       vm.customer.kids.push({});
       for (var i = 0; i < 6; i++) {
         focusOn('kidname' + i);
@@ -104,9 +120,9 @@
     }
 
     function focusOn(id) {
-      $timeout(function() {
+      $timeout(function () {
         var element = $window.document.getElementById(id);
-        if(element) {
+        if (element) {
           element.focus();
         }
       });

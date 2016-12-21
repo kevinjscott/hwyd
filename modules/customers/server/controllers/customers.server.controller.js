@@ -8,8 +8,17 @@ var path = require('path'),
   Customer = mongoose.model('Customer'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   send = require(path.resolve('./modules/scheduledstuff/server/send')),
-  s = require("underscore.string"),
+  s = require('underscore.string'),
   _ = require('lodash');
+
+var teachersNames = function(kidsObj, separator) {
+  var k = kidsObj;
+  k = _.map(k, 'teacher.name');
+  k = _.uniq(k);
+  k = _.sortBy(k);
+  var result = s.toSentenceSerial(k, ', ', separator);
+  return result;
+};
 
 /**
  * Create a Customer
@@ -140,13 +149,4 @@ exports.customerByID = function(req, res, next, id) {
     req.customer = customer;
     next();
   });
-};
-
-var teachersNames = function(kidsObj, separator) {
-  var k = kidsObj;
-  k = _.map(k, 'teacher.name');
-  k = _.uniq(k);
-  k = _.sortBy(k);
-  var result = s.toSentenceSerial(k, ', ', separator);
-  return result;
 };

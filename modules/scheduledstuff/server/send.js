@@ -36,25 +36,25 @@ exports.twilioText = function twilioText(text, recipient) {
   var client = require('twilio')(config.twilio.sid, config.twilio.token);
 
   client.sendMessage({
-      to: recipient, // Any number Twilio can deliver to
-      from: config.twilio.from, // A number you bought from Twilio and can use for outbound communication
-      body: text // body of the SMS message
+    to: recipient, // Any number Twilio can deliver to
+    from: config.twilio.from, // A number you bought from Twilio and can use for outbound communication
+    body: text // body of the SMS message
 
   }, function(err, responseData) { //this function is executed when a response is received from Twilio
-      if (err) {
-        console.log('Not sent to Twilio');
-      } else {
-          // "responseData" is a JavaScript object containing data received from Twilio.
-          // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
-          // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+    if (err) {
+      console.log('Not sent to Twilio');
+    } else {
+      // "responseData" is a JavaScript object containing data received from Twilio.
+      // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+      // http://www.twilio.com/docs/api/rest/sending-sms#example-1
 
-          console.log('Sent to Twilio ' + recipient + ': ' + text);
-          // console.log(responseData.from); // outputs "+14506667788"
-          // console.log(responseData.body); // outputs "word to your mother."
-
-      }
+      console.log('Sent to Twilio ' + recipient + ': ' + text);
+      // console.log(responseData.from); // outputs "+14506667788"
+      // console.log(responseData.body); // outputs "word to your mother."
+    }
   });
-}
+};
+
 exports.sendTestEmail = function (msg, to) {
   var message = null;
 
