@@ -21,6 +21,14 @@
     vm.saveCustomer = saveCustomer;
     vm.addKid = addKid;
 
+    vm.deliverymethod = {
+        availableOptions: [
+          {id: 'email', name: 'Email', placeholder: 'Email address'},
+          {id: 'text', name: 'Text / SMS', placeholder: 'Phone number'},
+          {id: 'slack', name: 'Slack', placeholder: 'Slack channel'}
+        ]
+      };
+
     // Remove existing School
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
@@ -59,9 +67,10 @@
         return false;
       }
 
-      vm.customer.name = vm.customer.email;
-      vm.customer.delivery.address = vm.customer.email;
-      vm.customer.delivery.method = 'email';
+      vm.customer.name = vm.customer.email || vm.customer.delivery.address;
+      // vm.customer.delivery.address = vm.customer.email;
+      // vm.customer.delivery.method = 'email';
+      vm.customer.delivery.method = vm.customer.delivery.method.id;
       vm.customer.delivery.time = moment(vm.customer.delivery.time).format('H:mm');
 
       if (vm.customer._id) {
@@ -82,10 +91,12 @@
     }
 
     vm.customer.kids = [{}];
-    vm.customer.delivery = {};
-    vm.customer.delivery.time = 'Tue Nov 22 2016 15:00:00 GMT-0500 (EST)';
+    vm.customer.delivery = {
+      method: {id: 'text', name: 'Text / SMS', placeholder: 'Phone number'}, //This sets the default value of the select in the ui
+      time: 'Tue Nov 22 2016 15:00:00 GMT-0500 (EST)'
+    };
 
-    function addKid(){ 
+    function addKid(){
       vm.customer.kids.push({});
       for (var i = 0; i < 6; i++) {
         focusOn('kidname' + i);

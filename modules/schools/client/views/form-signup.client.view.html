@@ -15,20 +15,35 @@
           <div class="col-sm-12 hidden-xs">e.g. before meeting the bus, picking up, or eating dinner</div>
           </div>
         </div>
+        <div class="row">
+          <div class="form-group col-xs-6" show-errors>
+            <select name="method" id="method" ng-model="vm.customer.delivery.method"
+            ng-options="option.name for option in vm.deliverymethod.availableOptions track by option.id" class="form-control">
+            </select><br>
+          </div>
+          <div class="col-xs-1"></div>
+          <div class="form-group col-xs-6" show-errors>
+            <input type="text" id="address" name="address" class="form-control" ng-model="vm.customer.delivery.address"
+            placeholder="{{vm.customer.delivery.method.placeholder}}" required autofocus>
+            <div ng-messages="vm.form.customerForm.address.$error" role="alert">
+              <p class="help-block error-text" ng-message="address">Address is required.</p>
+            </div>
+          </div>
+        </div>
 
-        <div class="form-group" show-errors>
-          <input type="email" id="email" name="email" class="form-control" ng-model="vm.customer.email" placeholder="my email address" lowercase required autofocus>
+        <!-- <div class="form-group" show-errors>
+          <input type="email" id="email" name="email" class="form-control" ng-model="vm.customer.email" placeholder="my email address" lowercase required>
           <div ng-messages="vm.form.customerForm.email.$error" role="alert">
             <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
           </div>
         </div>
-
-        <div ng-repeat="item in vm.customer.kids">
-          <div class="form-group" show-errors>
+ -->
+        <div ng-repeat="item in vm.customer.kids" class="row">
+          <div class="form-group col-xs-6" show-errors>
             <input name="kidname{{$index}}" type="text" ng-model="vm.customer.kids[$index].name" id="kidname{{$index}}" class="form-control" placeholder="Child's first name" required>
           </div>
-
-          <div class="form-group" show-errors>
+          <div class="col-xs-1"></div>
+          <div class="form-group col-xs-6" show-errors>
             <ui-select name="teacher{{$index}}" id="teacher{{$index}}" class="" ng-model="vm.customer.kids[$index].teacher" theme="bootstrap" required>
               <ui-select-match placeholder="Select teacher...">{{$select.selected.name}}</ui-select-match>
               <ui-select-choices repeat="item in vm.school.teachers | filter: $select.search">

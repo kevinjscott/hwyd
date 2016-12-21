@@ -29,11 +29,10 @@ var CustomerSchema = new Schema({
   },
   email: {
     type: String,
-    unique: true,
+    sparse: true,
     lowercase: true,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+    default: ''
   },
   firstname: String,
   delivery: {
