@@ -17,7 +17,8 @@
   "scripts": {
     "start": "gulp",
     "test": "grunt test",
-    "postinstall": "bower install --config.interactive=false --allow-root"
+    "postinstall": "bower install --config.interactive=false --allow-root",
+    "postversion": "git push"
   },
   "dependencies": {
     "acl": "~0.4.4",
