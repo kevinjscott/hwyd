@@ -33,7 +33,7 @@
     register: true,
     sinon: true,
     _: true,
-    s: true,
-    version: true
+    version: true,
+    s: true
   }
 }

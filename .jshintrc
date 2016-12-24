@@ -17,7 +17,8 @@
     "io": true,
     "ApplicationConfiguration": true,
     "_": true,
-    "s": true
+    "s": true,
+    "version": true
   },
   "predef": [ // Extra globals.
     "inject",
